@@ -10,8 +10,14 @@ void finisher_exit(uint16_t code)
 {
   if (!finisher) return;
   if (code == 0) {
+#ifdef NEMU
+    asm volatile("mv a0, %0; .word 0x6b" : : "r"(0));
+#endif
     *finisher = FINISHER_PASS;
   } else {
+#ifdef NEMU
+    asm volatile("mv a0, %0; .word 0x6b" : : "r"(1));
+#endif
     *finisher = code << 16 | FINISHER_FAIL;
   }
 }
